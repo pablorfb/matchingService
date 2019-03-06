@@ -8,9 +8,9 @@ namespace MatchingService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class MatchController : ControllerBase
     {
-        // GET api/values
+        // GET api/matcher
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
