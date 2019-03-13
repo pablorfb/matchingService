@@ -1,7 +1,7 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MatchingService.Feature;
+using MatchingService.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchingService.Controllers
@@ -10,36 +10,26 @@ namespace MatchingService.Controllers
     [ApiController]
     public class MatchController : ControllerBase
     {
-        // GET api/matcher
+        private static Matcher Matcher = MatcherFactory.GetInstance();
+
+        // GET api/match
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<GameMatch> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(Matcher.TryMatch());
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
+        // POST api/match
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] GameRequest value)
         {
-        }
+            if (Matcher.TryAdd(value))
+            {
+                return Accepted();
+            }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            return BadRequest("The user id could not be added to the queue");
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
